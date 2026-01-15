@@ -1,0 +1,45 @@
+# Claude Code
+.claude/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (uncomment if needed to exclude large files)
+# 02_Data/raw/*.csv
+
+# Logs
+*.log
+
+# Model checkpoints
+*.pkl
+*.joblib
+*.h5
+
+# Temporary files
+*.tmp
+*.temp
+
+# Reference repository (temp)
+temp_reference/

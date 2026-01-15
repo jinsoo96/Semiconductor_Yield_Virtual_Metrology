@@ -5,23 +5,23 @@
 [![Code Style](https://img.shields.io/badge/code%20style-clean-brightgreen.svg)](https://github.com/psf/black)
 [![Status](https://img.shields.io/badge/status-research-success.svg)](https://github.com)
 
-> **Machine Learning-based Quality Index Prediction Model for Semiconductor Manufacturing Process**
+> **반도체 센서 데이터를 활용한 공정 품질 지수 가상 계측(Virtual Metrology) 모델 개발**
 
-SK-Planet Data Analyst Training Program Project (2023.01.03 ~ 2023.03.09)
+SK-Planet 데이터 분석가 양성과정 프로젝트 (2023.01.03 ~ 2023.03.09)
 
 ---
 
 ## Overview
 
-This project develops a **Virtual Metrology (VM) model** that predicts the quality index of semiconductor manufacturing processes using sensor data. The model leverages 665 sensor variables across 7 process steps, applying feature engineering, multicollinearity treatment, and hyperparameter optimization techniques.
+반도체 제조 공정에서 수집된 센서 데이터를 활용하여 **공정 품질 지수(Quality Index)를 예측**하는 머신러닝 모델을 개발하였습니다. 665개의 센서 변수와 7개의 공정 스텝 데이터를 기반으로 피처 엔지니어링, 다중공선성 처리, 하이퍼파라미터 최적화 등의 기법을 적용하였습니다.
 
 ### Key Features
 
-- **Feature Engineering**: 665 sensor variables → 800+ derived features
-- **Multicollinearity Treatment**: PCA dimensionality reduction for VIF > 10 variables
-- **Feature Selection**: SelectKBest (Mutual Information) based top 250 features
-- **Bayesian Optimization**: Automated hyperparameter tuning for Ridge, Random Forest
-- **AutoML**: Multi-model comparison and auto-tuning with PyCaret
+- **Feature Engineering**: 665개 센서 변수 → 800+ 파생 변수 생성
+- **Multicollinearity Treatment**: VIF > 10 변수에 대한 PCA 차원 축소
+- **Feature Selection**: SelectKBest (Mutual Information) 기반 상위 250개 피처 선택
+- **Bayesian Optimization**: Ridge, Random Forest 하이퍼파라미터 자동 튜닝
+- **AutoML**: PyCaret을 활용한 다중 모델 비교 및 자동 튜닝
 
 ### Quick Stats
 
@@ -80,8 +80,8 @@ pip install -r requirements.txt
 
 ```bash
 # Clone the repository
-git clone git@github.com:jinsoo96/Semiconductor-Yield-Virtual-Metrology.git
-cd Semiconductor-Yield-Virtual-Metrology
+git clone https://github.com/jinsoo96/T_academy_semiconductor_ai.git
+cd T_academy_semiconductor_ai
 
 # Install Python packages
 pip install -r requirements.txt
@@ -107,7 +107,7 @@ jupyter notebook 01_Code/02_modeling.ipynb
 ## Repository Structure
 
 ```
-Semiconductor-Yield-Virtual-Metrology/
+semiconductor_analysis/
 │
 ├── 01_Code/
 │   ├── utils.py                          # Common utility functions (shared module)
@@ -134,8 +134,7 @@ Semiconductor-Yield-Virtual-Metrology/
 │
 ├── archive/                              # Original development files
 │
-├── README.md                             # This file (English)
-├── README_KR.md                          # Korean version
+├── README.md                             # This file
 ├── requirements.txt                      # Python dependencies
 ├── LICENSE                               # MIT License
 └── .gitignore                            # Git ignore rules
@@ -148,7 +147,7 @@ Semiconductor-Yield-Virtual-Metrology/
 ### 1. Data Collection & Preprocessing
 
 - **Source**: SK HYNIX semiconductor manufacturing data
-- **Period**: October 2021
+- **Period**: 2021 (October)
 - **Sample**: 611 LOT observations with 665 sensor features
 
 **Preprocessing Steps:**
@@ -209,56 +208,56 @@ Final Feature Set (~300 features)
 
 ### 1. Target Variable Analysis
 
-**Finding**: Target variable y follows approximately normal distribution (mean: 1263.41, variance: 67.16)
-- **Insight**: Normal distribution assumption is valid, favorable for regression models
-- **Action**: Clip outliers below y < 1240 for model stability
+**Finding**: 타겟 변수 y는 평균 1263.41, 분산 67.16인 정규분포를 따름
+- **Insight**: 정규분포 가정이 적절하므로 회귀 모델 적용에 유리
+- **Action**: y < 1240 이하의 이상치를 clip하여 모델 안정성 확보
 
 ### 2. Equipment Effect (module_name_eq)
 
-**Finding**: Significant quality index variation exists across equipment (EQ1~EQ8)
-- **Insight**: EQ7, EQ8 show relatively lower quality indices compared to others
-- **Action**: One-hot encode module_name_eq as categorical feature
+**Finding**: 장비(EQ1~EQ8)에 따라 품질 지수에 유의한 차이 존재
+- **Insight**: 특정 장비(EQ7, EQ8)는 다른 장비 대비 낮은 품질 지수 경향
+- **Action**: module_name_eq를 범주형 변수로 원-핫 인코딩하여 모델에 반영
 
 ### 3. Process Duration Impact
 
-**Finding**: Total process duration clearly separates into two groups at 1870 seconds threshold
-- **Early Group (E)**: ~30.6 min, mainly EQ7, EQ8 modules
-- **Late Group (L)**: ~31.9 min, most modules
-- **Insight**: Correlation exists between process speed and quality
-- **Action**: Create tmdiff_speed categorical variable as model feature
+**Finding**: 전체 공정 소요시간이 1870초를 기준으로 두 그룹으로 명확히 구분
+- **Early Group (E)**: ~30.6분, 주로 EQ7, EQ8 모듈
+- **Late Group (L)**: ~31.9분, 대부분의 모듈
+- **Insight**: 공정 속도와 품질 간의 상관관계 존재
+- **Action**: tmdiff_speed 범주형 변수 생성하여 모델 피처로 활용
 
 ### 4. Critical Process Steps
 
-**Finding**: Step 06 → Step 12 shows longest duration and highest variability
-- **Insight**: This interval is estimated to have the greatest impact on quality
-- **Action**: Generate inter-step duration features (gen_tmdiff_0612, etc.)
+**Finding**: Step 06 → Step 12 간 소요시간이 가장 길고 변동성이 높음
+- **Insight**: 이 구간이 품질에 가장 큰 영향을 미치는 핵심 공정으로 추정
+- **Action**: 개별 스텝 간 소요시간(gen_tmdiff_0612 등)을 파생 변수로 생성
 
 ### 5. Sensor Aggregation Value
 
-**Finding**: Aggregated sensor statistics (std, mean) across steps show higher predictive power than individual step values
-- **Insight**: Step-wise variability is a key indicator for quality prediction
-- **Action**: Generate 95 sensor std (gen_{sensor}_std) and mean (gen_{sensor}_mean) features
+**Finding**: 개별 스텝 센서값보다 전 스텝 집계값(std, mean)이 더 높은 예측력 보유
+- **Insight**: 스텝 간 변동성이 품질 예측에 중요한 지표
+- **Action**: 95개 센서별 표준편차(gen_{sensor}_std)와 평균(gen_{sensor}_mean) 변수 생성
 
 ### 6. Multicollinearity Issue
 
-**Finding**: Multiple variables with VIF > 10 exist (multicollinearity problem)
-- **Insight**: High correlation among sensor variables poses model instability risk
-- **Action**: Apply PCA to VIF > 10 variables, reduce to 2 principal components
+**Finding**: VIF > 10인 변수가 다수 존재 (다중공선성 문제)
+- **Insight**: 센서 변수 간 높은 상관관계로 인한 모델 불안정성 위험
+- **Action**: VIF > 10 변수들에 PCA 적용하여 2개 주성분으로 차원 축소
 
 ### 7. Feature Importance
 
-**Finding**: Model performance maintained with top 250 features selected by Mutual Information
+**Finding**: Mutual Information 기반 상위 250개 피처 선택 시 성능 유지
 - **Key Features**:
   - Process duration features (gen_tmdiff_*)
   - Aggregated sensor statistics (gen_*_std, gen_*_mean)
   - Equipment categorical features
-- **Insight**: Derived features show higher predictive power than original sensor variables
+- **Insight**: 파생 변수가 원본 센서 변수보다 예측력이 높음
 
 ### 8. Class Imbalance
 
-**Finding**: Target variable shows imbalance when binned into 3 categories (A: y<1242, B: 1242≤y≤1283, C: y>1283)
-- **Distribution**: Most samples concentrated in B category
-- **Action**: Apply RandomOverSampler for minority class oversampling
+**Finding**: 타겟 변수를 3개 구간(A: y<1242, B: 1242≤y≤1283, C: y>1283)으로 분류 시 불균형 발생
+- **Distribution**: B 구간에 대부분의 샘플 집중
+- **Action**: RandomOverSampler로 소수 클래스 오버샘플링
 
 ---
 
@@ -270,32 +269,26 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import SelectKBest, mutual_info_regression
 from sklearn.model_selection import train_test_split
-
-# Import utility functions
-from utils import (
-    load_data, make_dataset,
-    gen_cate_feats, gen_duration_feats, gen_stats_feats,
-    LST_STEPS, LST_STEPSGAP
-)
+from pycaret.regression import setup, compare_models, tune_model
 
 # Load data
 path = "./02_Data/raw/"
-train_sensor, train_quality, predict_sensor = load_data(path)
+train_sensor = pd.read_csv(f'{path}train_sensor.csv')
+train_quality = pd.read_csv(f'{path}train_quality.csv')
 
 # Create dataset
 train = make_dataset(train_sensor, train_quality)
 
 # Feature engineering
 train = gen_cate_feats(train)           # Equipment category
-train = gen_duration_feats(train, LST_STEPSGAP)  # Process duration
-train = gen_stats_feats(train, sensors_nm, LST_STEPS)  # Sensor statistics
+train = gen_duration_feats(train)       # Process duration
+train = gen_stats_feats(train)          # Sensor statistics
 
 # Feature selection
 skb = SelectKBest(score_func=mutual_info_regression, k=250)
 X_selected = skb.fit_transform(X, y)
 
-# Train model
-from pycaret.regression import setup, compare_models, tune_model
+# AutoML
 reg = setup(data=train_df, target='y', normalize=True)
 best = compare_models(sort='RMSE')
 best_tuned = tune_model(best)
@@ -336,10 +329,10 @@ seaborn>=0.11.0
 
 | Name | Role |
 |------|------|
-| Yukyung Lim | Data Analysis & Modeling |
-| Jin Soo Kim | Feature Engineering & Optimization |
-| Hojin Lee | EDA & Visualization |
-| Seungah Ahn | Preprocessing & Documentation |
+| 임유경 | Data Analysis & Modeling |
+| 김진수 | Feature Engineering & Optimization |
+| 이호진 | EDA & Visualization |
+| 안승아 | Preprocessing & Documentation |
 
 ---
 
@@ -347,8 +340,7 @@ seaborn>=0.11.0
 
 | Document | Description |
 |----------|-------------|
-| [README.md](README.md) | Project overview - English (this file) |
-| [README_KR.md](README_KR.md) | Project overview - Korean |
+| [README.md](README.md) | Project overview (this file) |
 | [Code_Structure.md](04_Documentation/Code_Structure.md) | Detailed code documentation |
 | [Analysis_Workflow.md](04_Documentation/Analysis_Workflow.md) | Step-by-step workflow |
 | [final_presentation.pdf](04_Documentation/final_presentation.pdf) | Final presentation slides |
@@ -357,25 +349,20 @@ seaborn>=0.11.0
 
 ## References
 
+- [SK HYNIX Project Notion](https://www.notion.so/SCV-SK-with-ASAC-2c4a1af25a594d1895b60ada4e7144ad)
 - [PyCaret Documentation](https://pycaret.org/)
 - [Bayesian Optimization](https://github.com/fmfn/BayesianOptimization)
 - [Scikit-learn Feature Selection](https://scikit-learn.org/stable/modules/feature_selection.html)
-- [Virtual Metrology in Semiconductor Manufacturing](https://ieeexplore.ieee.org/)
 
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-```
-MIT License
-Copyright (c) 2023 Jin Soo Kim
-```
+This project is for educational purposes as part of SK-Planet Data Analyst Training Program.
 
 ---
 
 ## Contact
 
-- **Author**: Jin Soo Kim
-- **GitHub**: [@jinsoo96](https://github.com/jinsoo96)
+- **Team**: SCV (SK with ASAC)
+- **Notion**: https://www.notion.so/SCV-SK-with-ASAC-2c4a1af25a594d1895b60ada4e7144ad

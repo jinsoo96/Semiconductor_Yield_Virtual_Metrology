@@ -1,0 +1,72 @@
+===============================================================================
+                        DATA INFORMATION
+===============================================================================
+
+Data Source: SK HYNIX Semiconductor Manufacturing
+Period: October 2021
+Total Samples: 611 (train), 256 (test)
+
+===============================================================================
+                        FILE DESCRIPTIONS
+===============================================================================
+
+1. train_sensor.csv (~24.5MB)
+   - Training sensor data in long format
+   - Columns:
+     * module_name: Equipment module ID (e.g., EQ4_PM6)
+     * key_val: LOT identifier (e.g., LOT64_18)
+     * param_alias: Sensor parameter name (e.g., EPD_para4)
+     * mean_val: Average sensor reading
+     * end_time: Process completion timestamp
+     * step_id: Process step ID (4, 6, 12, 13, 17, 18, 20)
+
+2. train_quality.csv (~25KB)
+   - Training quality labels
+   - Columns:
+     * key_val: LOT identifier
+     * msure_val: Quality measurement value (Target: y)
+     * end_dt_tm: Measurement timestamp
+
+3. predict_sensor.csv (~10.5MB)
+   - Test sensor data (same format as train_sensor.csv)
+   - Used for final predictions
+
+===============================================================================
+                        DATA STATISTICS
+===============================================================================
+
+Sensor Variables: 665 (95 sensors × 7 steps)
+Process Steps: 7 (04, 06, 12, 13, 17, 18, 20)
+Equipment Modules: 47 unique modules (8 EQ categories)
+
+Target Variable (y):
+  - Mean: 1263.41
+  - Std: 8.20
+  - Min: ~1200
+  - Max: ~1320
+  - Distribution: Approximately Normal
+
+===============================================================================
+                        SENSOR CATEGORIES
+===============================================================================
+
+- EFEM: Equipment Front End Module parameters
+- EPD: End Point Detection parameters
+- HV: High Voltage parameters
+- HE: Helium parameters
+- FR: Flow Rate parameters
+- GAS: Gas flow parameters
+- TEMP: Temperature parameters
+- TIME: Time-related parameters
+- PRESSURE: Pressure parameters
+
+===============================================================================
+                        NOTES
+===============================================================================
+
+1. Data contains sensitive manufacturing information
+2. Use for educational/research purposes only
+3. Outliers exist in both sensor and quality data
+4. Some sensors have zero variance (constant values)
+
+===============================================================================
