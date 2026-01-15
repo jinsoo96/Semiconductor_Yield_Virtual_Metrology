@@ -80,8 +80,8 @@ pip install -r requirements.txt
 
 ```bash
 # Clone the repository
-git clone git@github.com:jinsoo96/Semiconductor-Yield-Virtual-Metrology.git
-cd Semiconductor-Yield-Virtual-Metrology
+git clone git@github.com:jinsoo96/Semiconductor_Yield_Virtual_Metrology.git
+cd Semiconductor_Yield_Virtual_Metrology
 
 # Install Python packages
 pip install -r requirements.txt
@@ -107,7 +107,7 @@ jupyter notebook 01_Code/02_modeling.ipynb
 ## Repository Structure
 
 ```
-Semiconductor-Yield-Virtual-Metrology/
+Semiconductor_Yield_Virtual_Metrology/
 │
 ├── 01_Code/
 │   ├── utils.py                          # Common utility functions (shared module)
@@ -134,8 +134,7 @@ Semiconductor-Yield-Virtual-Metrology/
 │
 ├── archive/                              # Original development files
 │
-├── README.md                             # This file (English)
-├── README_KR.md                          # Korean version
+├── README.md                             # This file
 ├── requirements.txt                      # Python dependencies
 ├── LICENSE                               # MIT License
 └── .gitignore                            # Git ignore rules
@@ -347,8 +346,7 @@ seaborn>=0.11.0
 
 | Document | Description |
 |----------|-------------|
-| [README.md](README.md) | Project overview - English (this file) |
-| [README_KR.md](README_KR.md) | Project overview - Korean |
+| [README.md](README.md) | Project overview (this file) |
 | [Code_Structure.md](04_Documentation/Code_Structure.md) | Detailed code documentation |
 | [Analysis_Workflow.md](04_Documentation/Analysis_Workflow.md) | Step-by-step workflow |
 | [final_presentation.pdf](04_Documentation/final_presentation.pdf) | Final presentation slides |

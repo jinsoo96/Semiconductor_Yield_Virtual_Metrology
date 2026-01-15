@@ -1,6 +1,9 @@
 # Claude Code
 .claude/
 
+# Korean README backup
+README_KR.md
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
